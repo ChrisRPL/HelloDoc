@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/hello_doc"/>
+    <item
+        android:width="400dp"
+        android:height="68dp" android:gravity="center">
+        <bitmap
+            android:gravity="fill_vertical|fill_horizontal"
+            android:src="@drawable/doc_v3" />
+
+
+    </item>
+
+
+
+
+</layer-list>

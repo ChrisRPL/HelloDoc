@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">HelloDoc</string>
+    <string name="title_activity_nearest_pharmacies">Apteki w Twojej okolicy</string>
+</resources>

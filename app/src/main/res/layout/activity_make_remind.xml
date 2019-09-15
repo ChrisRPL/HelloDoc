@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MakeRemind">
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="144dp"
+        android:layout_height="62dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Dodaj"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/labelUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="Ustaw dane przypomnienia"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/dateButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="58dp"
+        app:layout_constraintEnd_toStartOf="@+id/timeButton"
+        app:layout_constraintTop_toBottomOf="@+id/labelUp"
+        app:srcCompat="@drawable/ic_event_note_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/timeButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelUp"
+        app:srcCompat="@drawable/ic_access_time_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/amountButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintStart_toEndOf="@+id/timeButton"
+        app:layout_constraintTop_toBottomOf="@+id/labelUp"
+        app:srcCompat="@drawable/ic_local_hospital_black_24dp" />
+
+    <TextView
+        android:id="@+id/dateLabel"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="58dp"
+        android:text="Data"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/timeButton"
+        app:layout_constraintTop_toBottomOf="@+id/dateButton" />
+
+    <TextView
+        android:id="@+id/timeLabel"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Godzina"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeButton" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/addButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateLabel">
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/lato_italic"
+            android:text="Podaj informacje dla przypomnienia, wybierając opcje powyżej"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <ListView
+            android:id="@+id/insideList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            tools:visibility="visible" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/amountLabel"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="2dp"
+        android:text="Dawka"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/timeButton"
+        app:layout_constraintTop_toBottomOf="@+id/amountButton" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/dateCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="100dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="Zaznacz datę, lub daty, dla przypomnienia"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <sun.bob.mcalendarview.MCalendarView
+                android:id="@+id/calendarReminder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="80dp"></sun.bob.mcalendarview.MCalendarView>
+
+            <Button
+                android:id="@+id/setButton"
+                android:layout_width="124dp"
+                android:layout_height="52dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="60dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/colorAccent"
+                android:fontFamily="@font/lato_bold"
+                android:text="Ustaw"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/setButton4"
+                android:layout_width="124dp"
+                android:layout_height="52dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="60dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/colorAccent"
+                android:fontFamily="@font/lato_bold"
+                android:text="Anuluj"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/timeCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="100dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Wybierz godzinę dla daty przypomnienia"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"></TimePicker>
+
+            <Button
+                android:id="@+id/setButton2"
+                android:layout_width="124dp"
+                android:layout_height="52dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="60dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/colorAccent"
+                android:fontFamily="@font/lato_bold"
+                android:text="Ustaw"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/setButton5"
+                android:layout_width="124dp"
+                android:layout_height="52dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="60dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/colorAccent"
+                android:fontFamily="@font/lato_bold"
+                android:text="Anuluj"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/amountCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="200dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Ustaw dawkę leku dla przypomnienia"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+
+            <Button
+                android:id="@+id/setButton3"
+                android:layout_width="124dp"
+                android:layout_height="52dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="60dp"
+                android:backgroundTint="@color/colorAccent"
+                android:fontFamily="@font/lato_bold"
+                android:text="Ustaw"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/setButton6"
+                android:layout_width="124dp"
+                android:layout_height="52dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="60dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/colorAccent"
+                android:fontFamily="@font/lato_bold"
+                android:text="Anuluj"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:id="@+id/editText2"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="140dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:background="?attr/editTextBackground"
+                android:ems="10"
+                android:inputType="number" />
+
+            <RadioButton
+                android:id="@+id/tabletkiReminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView17"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="tabletki" />
+
+            <RadioButton
+                android:id="@+id/mililitryReminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView17"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:text="mililitry" />
+
+            <RadioButton
+                android:id="@+id/dawkiReminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView17"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="40dp"
+                android:text="dawki" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
