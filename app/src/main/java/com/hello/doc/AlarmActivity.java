@@ -3,14 +3,12 @@ package com.hello.doc;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,15 +16,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class AlarmActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
-    Bundle bundle;
-    String name, urlImage, amount;
     TextView nameAlarm, amountAlarm;
     ImageView urlAlarm;
     SharedPreferences sharedPreferences;
@@ -61,12 +56,11 @@ public class AlarmActivity extends AppCompatActivity {
                 String name = daneReminder[i].replace(currentDateTime, "").split("  ")[1];
                 String imageUrl = daneReminder[i].replace(currentDateTime, "").split("  ")[0];
                 String amount = daneReminder[i].replace(currentDateTime, "").split("  ")[2];
-                Log.i("NAME", name);
-                Log.i("IMAGE URL", imageUrl);
-                Log.i("amount", amount);
+
                 nameAlarm.setText(name);
                 amountAlarm.setText("Dawka: " + amount);
                 Picasso.with(this).load(imageUrl).into(urlAlarm);
+
                 sharedPreferences.edit().putString("remindDane", sharedPreferences.getString("remindDane", "").replace(daneReminder[i], "")).apply();
             }
         }
@@ -75,8 +69,6 @@ public class AlarmActivity extends AppCompatActivity {
         String nowePrzypomnienia = "";
 
         for (int i=0; i<przypomnienia.length; i++){
-            Log.i("aaaaaaaaaaaaaa", przypomnienia[i]);
-            Log.i("heeeeeeeeeeeeeeee", currentDateTime);
             if (przypomnienia[i].contains(currentDateTime)){
                 przypomnienia[i] = "";
                 continue;

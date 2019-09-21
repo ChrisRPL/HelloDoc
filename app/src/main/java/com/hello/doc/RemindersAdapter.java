@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,10 +35,12 @@ public class RemindersAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.reminders, null,true);
 
+
        TextView dateText = rowView.findViewById(R.id.date);
-       TextView timeText = rowView.findViewById(R.id.time);
+       final TextView timeText = rowView.findViewById(R.id.time);
        TextView amountText = rowView.findViewById(R.id.amount);
         final CheckBox checkBox = rowView.findViewById(R.id.checkBox);
+
 
        dateText.setText("Data: " + date.get(position));
        timeText.setText("Godzina: " + time.get(position));
@@ -53,6 +54,7 @@ public class RemindersAdapter extends ArrayAdapter<String> {
                 }
                 else {
                     isChecked.set(position, false);
+
                 }
             }
         });
@@ -60,18 +62,6 @@ public class RemindersAdapter extends ArrayAdapter<String> {
 
 
        return  rowView;
-    }
-
-    @Nullable
-    @Override
-    public String getItem(int position) {
-        LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.reminders, null,true);
-        final CheckBox checkBox = rowView.findViewById(R.id.checkBox);
-
-        return date.get(position) + ", " + time.get(position) + ", " + amount.get(position) + ", " + isChecked.get(position);
-
-
     }
 
 

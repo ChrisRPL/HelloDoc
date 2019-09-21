@@ -3,17 +3,12 @@ package com.hello.doc;
 public class ListMedicines {
     private String medicineName;
     private String id;
-    private String effect;
     private String pills;
     private String reminder;
     private String thumbnail;
 
     public String getMedicineName() {
         return medicineName;
-    }
-
-    public String getEffect() {
-        return effect;
     }
 
     public String getId() {
@@ -44,10 +39,6 @@ public class ListMedicines {
         this.id = id;
     }
 
-    public void setEffect(String effect) {
-        this.effect = effect;
-    }
-
     public void setPills(String pills) {
         this.pills = pills;
     }
@@ -59,7 +50,7 @@ public class ListMedicines {
 
     @Override
     public String toString() {
-        return "Medicines [id = " + id + ", medicineName = " + medicineName + ", effect = " + effect + ", pills = " + pills + ", reminder = " + reminder + "]";
+        return "Medicines [id = " + id + ", medicineName = " + medicineName +", pills = " + pills + ", reminder = " + reminder + "]";
     }
 
 

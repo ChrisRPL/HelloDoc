@@ -17,16 +17,15 @@ public class Navigation extends BottomNavigationView {
     private Paint mPaint;
 
 
-    /** the CURVE_CIRCLE_RADIUS represent the radius of the fab button */
+
     public final int CURVE_CIRCLE_RADIUS = 0;
-    // the coordinates of the first curve
+
     public Point mFirstCurveStartPoint = new Point();
     public Point mFirstCurveEndPoint = new Point();
     public Point mFirstCurveControlPoint2 = new Point();
     public Point mFirstCurveControlPoint1 = new Point();
 
-    //the coordinates of the second curve
-    @SuppressWarnings("FieldCanBeLocal")
+
     public Point mSecondCurveStartPoint = new Point();
     public Point mSecondCurveEndPoint = new Point();
     public Point mSecondCurveControlPoint1 = new Point();
@@ -57,8 +56,7 @@ public class Navigation extends BottomNavigationView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        // get width and height of navigation bar
-        // Navigation bar bounds (width & height)
+
         mNavigationBarWidth = getWidth();
         mNavigationBarHeight = getHeight();
         // the coordinates (x,y) of the start point before curve

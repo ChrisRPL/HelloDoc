@@ -5,18 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.Window;
-
-import androidx.core.app.NotificationCompat;
-
-import java.nio.channels.Channel;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class AlertReceiver extends BroadcastReceiver {
-    String name, imageUrl, amount;
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -40,7 +33,7 @@ public class AlertReceiver extends BroadcastReceiver {
         for (int i=0; i<daneLekarstw.length; i++){
             if (daneLekarstw[i].contains(nazwa)){
                 zawartosc = daneLekarstw[i].split("  ")[2];
-                Log.i("INFO", zawartosc);
+
                 rodzajDawki = zawartosc.split(" ")[1];
                 nowaZawartosc = Integer.toString(Integer.parseInt(zawartosc.split(" ")[0]) - Integer.parseInt(dawka.split(" ")[0])) + " " + rodzajDawki;
                 if (Integer.parseInt(nowaZawartosc.replace(" " + rodzajDawki, "")) <= 0)

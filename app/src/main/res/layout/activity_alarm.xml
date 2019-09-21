@@ -11,8 +11,9 @@
         android:id="@+id/odrzucButton"
         android:layout_width="150dp"
         android:layout_height="80dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/colorAccent"
+        android:elevation="5dp"
         android:fontFamily="@font/lato_italic"
         android:text="ODRZUĆ"
         android:textAlignment="center"
@@ -22,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountAlarm" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
     <TextView
         android:id="@+id/textView7"
@@ -30,6 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/lato_bold"
+        android:shadowColor="@color/red_shadow2"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
         android:text="WEŹ LEK!"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
@@ -40,44 +45,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/medicineAlarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="300dp"
+        android:layout_height="320dp"
         android:layout_marginTop="24dp"
-        android:fontFamily="@font/lato_italic"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/textView7">
 
-    <ImageView
-        android:id="@+id/imageAlarm"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medicineAlarm"
-        app:srcCompat="@color/colorAccent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/amountAlarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageAlarm" />
+            <TextView
+                android:id="@+id/amountAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:shadowColor="@color/colorPrimary"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageAlarm" />
+
+            <ImageView
+                android:id="@+id/imageAlarm"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/medicineAlarm"
+                app:srcCompat="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/medicineAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/lato_italic"
+                android:shadowColor="@color/colorPrimary"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

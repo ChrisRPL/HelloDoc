@@ -20,26 +20,20 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
+
 
 
 public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperListener {
@@ -48,14 +42,14 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
     private List<ListMedicines> list , backupList;
     private MedicinesAdapter medicinesAdapter;
     private CoordinatorLayout coordinatorLayout;
-    String medicineName = "", reminPomocStr = "", reminPomocStrCzyste = "", reminPomocStrSwipe = "", code = "";
-    SharedPreferences sharedPreferences;
-    String[] pomoc, wewPomoc, reminPomoc, reminPomocSwipe;
-    int rozmiar;
-    ListMedicines listMedicines;
-    SearchView searchView;
-    TextView mainText;
-    Boolean connected;
+    private String medicineName = "", reminPomocStr = "", reminPomocStrCzyste = "", reminPomocStrSwipe = "", code = "";
+    private SharedPreferences sharedPreferences;
+    private String[] pomoc, wewPomoc, reminPomoc, reminPomocSwipe;
+    private ListMedicines listMedicines;
+    private SearchView searchView;
+    private TextView mainText;
+    private Boolean connected;
+    private ImageView ludzik;
 
 
 
@@ -83,29 +77,28 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
         searchView = getView().findViewById(R.id.searchView);
         searchView.setQueryHint("szukaj...");
         mainText = getView().findViewById(R.id.textView2);
+        ludzik = getView().findViewById(R.id.ludzik);
+
+
 
         ConnectivityManager connectivityManager = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
+
             connected = true;
         }
         else{
             connected = false;
 
-            new AlertDialog.Builder(getContext())
-                    .setTitle("NO INTERNET CONNECTION")
-                    .setMessage("Please check your internet connection")
-
-                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                    // The dialog is automatically dismissed when a dialog button is clicked.
+            new AlertDialog.Builder(getContext()).setCancelable(false)
+                    .setTitle("BRAK POŁĄCZENIA Z INTERNETEM")
+                    .setMessage("Sprawdź swoje połączenie z internetem")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             getActivity().finish();
                         }
                     })
 
-                    // A null listener allows the button to dismiss the dialog and take no further action.
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
@@ -177,19 +170,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
         pomoc = sharedPreferences.getString("lekiDane", "").split("%!%");
         reminPomoc = sharedPreferences.getString("lekiReminder", "").split("%!%");
 
-        Log.i("sadsadasd", sharedPreferences.getString("lekiDane", ""));
-        Log.i("asdasdasda", sharedPreferences.getString("lekiReminder", ""));
 
-        String sprawd = "";
-
-        for (String siema: pomoc)
-        {
-            sprawd+=siema;
-        }
-
-        Date current = Calendar.getInstance().getTime();
-
-        Log.i("POMOCASDSADSADASDAHUUJ", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(current));
         if (!sharedPreferences.getString("lekiDane", "").equals("")) {
             for (int i = 0; i < pomoc.length; i++) {
                 wewPomoc = pomoc[i].split("  ");
@@ -207,9 +188,10 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
                 }
 
                 if (reminPomocStrCzyste.equals(""))
-                    listMedicines.setReminder("brak przypomnień;");
+                    listMedicines.setReminder("\n" + "brak przypomnień;");
                 else
                     listMedicines.setReminder(reminPomocStrCzyste);
+                reminPomocStrCzyste = "";
 
                 list.add(listMedicines);
             }
@@ -229,7 +211,6 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
         recyclerView.setAdapter(medicinesAdapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        // recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 
 
@@ -246,8 +227,6 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
                         .setTitle("Puste lekarstwo")
                         .setMessage("Zawartość jednego z Twoich lekarstw jest pusta. Czy wyświetlić apteki w pobliżu, w których zakupisz brakujący lek?")
 
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Uri gmmIntentUri = Uri.parse("geo:0,0?q=apteka");
@@ -258,7 +237,6 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
                             }
                         })
 
-                        // A null listener allows the button to dismiss the dialog and take no further action.
                         .setNegativeButton(android.R.string.no, null)
                         .setIcon(R.drawable.ic_local_hospital_black_24dp)
                         .show();
@@ -269,12 +247,16 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
         if (!sharedPreferences.getString("lekiDane", "").equals("")){
             recyclerView.setVisibility(View.VISIBLE);
             mainText.setVisibility(View.INVISIBLE);
+            ludzik.setVisibility(View.INVISIBLE);
         }
         else{
             recyclerView.setVisibility(View.INVISIBLE);
             mainText.setVisibility(View.VISIBLE);
+            ludzik.setVisibility(View.VISIBLE);
         }
         mainText.setZ(100);
+        ludzik.setZ(100);
+        ludzik.setAlpha(125);
 
 
     }
@@ -305,7 +287,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
                 public void onClick(View v) {
                     medicinesAdapter.restoreItem(deletedItem, deleteIndex);
                     sharedPreferences.edit().putString("lekiDane", sharedPreferences.getString("lekiDaneBackup", "")).apply();
-                    sharedPreferences.edit().putString("lekiReminder", sharedPreferences.getString("lekiReminder", "") + reminPomocStrSwipe).apply();
+                    sharedPreferences.edit().putString("lekiReminder", sharedPreferences.getString("lekiReminder", "")).apply();
 
                 }
             });

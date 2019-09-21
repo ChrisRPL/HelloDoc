@@ -27,9 +27,12 @@
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="62dp"
+        app:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:itemIconTint="@drawable/checked"
+        app:itemTextColor="@drawable/checked">
 
     </com.hello.doc.Navigation>
 

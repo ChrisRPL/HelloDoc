@@ -158,9 +158,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato_bold"
                 android:text="Zaznacz datę, lub daty, dla przypomnienia"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <sun.bob.mcalendarview.MCalendarView
                 android:id="@+id/calendarReminder"
@@ -230,9 +232,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_bold"
                 android:text="Wybierz godzinę dla daty przypomnienia"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TimePicker
                 android:id="@+id/timePicker"
@@ -300,9 +304,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_bold"
                 android:text="Ustaw dawkę leku dla przypomnienia"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
 
             <Button

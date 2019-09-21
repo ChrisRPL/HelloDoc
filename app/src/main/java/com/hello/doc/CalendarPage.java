@@ -1,7 +1,5 @@
 package com.hello.doc;
 
-import android.app.ActionBar;
-import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,14 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import sun.bob.mcalendarview.MCalendarView;
@@ -29,7 +25,6 @@ import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.vo.DateData;
 
 public class CalendarPage extends Fragment {
-    DatePicker datePicker;
     ListView listView;
     RemindersListAdapter remindersListAdapter;
     ArrayList<String> timeClock, medicineText, amountText, dateRemind;
@@ -73,10 +68,12 @@ public class CalendarPage extends Fragment {
         arrayListHelp = sharedPreferences.getString("remindDane", "").split("%!%");
         listView = getView().findViewById(R.id.list);
         textView = getView().findViewById(R.id.textView3);
+        mCalendarView.init(getActivity());
 
         String[] datesToMark = sharedPreferences.getString("datesToMark", "").split("%!%");
         List<DateData> lista = new ArrayList<>();
 
+        mCalendarView.getMarkedDates().getAll().clear();
 
 
         if (!sharedPreferences.getString("datesToMark", "").equals("")) {
@@ -155,15 +152,6 @@ public class CalendarPage extends Fragment {
             }
         }
 
-        List<DateData> zaznaczone = mCalendarView.getMarkedDates().getAll();
-
-        for (int i=0; i<zaznaczone.size(); i++){
-            mCalendarView.unMarkDate(zaznaczone.get(i));
-        }
-
-        for (int i=0; i<lista.size(); i++){
-            mCalendarView.markDate(lista.get(i));
-        }
 
 
 
@@ -171,6 +159,8 @@ public class CalendarPage extends Fragment {
 
 
         mCalendarView.setOnDateClickListener(new OnDateClickListener() {
+
+
             List<DateData> list = new ArrayList<>();
             @Override
             public void onDateClick(View view, DateData date) {
@@ -183,12 +173,6 @@ public class CalendarPage extends Fragment {
                    mCalendarView.markDate(list.get(list.size() - 1));
                }else if (list.size() == 1)
                    mCalendarView.markDate(list.get(0));
-               Log.i("listsize", Integer.toString(list.size()));
-
-
-
-
-
 
                 int dayOfMonth = date.getDay(), year = date.getYear(), monthOfYear = date.getMonth();
 
@@ -197,8 +181,6 @@ public class CalendarPage extends Fragment {
                 medicineText.clear();
                 dateRemind.clear();
                 amountText.clear();
-
-                Log.i("sdasdasdas", Integer.toString(monthOfYear));
 
                 switch (dayOfMonth){
                     case 1:
@@ -297,6 +279,7 @@ public class CalendarPage extends Fragment {
 
             }
         });
+
 
 
     }

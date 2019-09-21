@@ -1,21 +1,18 @@
 package com.hello.doc;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.speech.tts.TextToSpeech;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,7 +24,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 
-import java.util.List;
 import java.util.Locale;
 
 public class Medicine extends AppCompatActivity {
@@ -36,20 +32,24 @@ public class Medicine extends AppCompatActivity {
     Bundle extras;
     String imageUrl = "", medicineName = "", description = "", secondDescription = "", remindPomoc = "";
     TextToSpeech textToSpeech;
-    FloatingActionButton floatingActionButton, floatingActionButton1;
+    FloatingActionButton floatingActionButton, floatingActionButton1, floatingActionButton3;
     SharedPreferences sharedPreferences;
     CardView cardView;
     ScrollView scrollView;
-    ConstraintLayout constraintLayout;
-    Button button, anuluj, dodaj;
+    Button anuluj, dodaj;
     EditText editText;
     Intent intent;
     RadioButton tabletki, mililitry, dawki;
     Boolean isSpeaking = false;
-    String[] pomoc, reminPomoc;
-    ListMedicines listMedicines;
-    MedicinesAdapter medicinesAdapter;
 
+
+    public Boolean isNumber(String number) {
+        for (int i=92; i<=122; i++) {
+            if (number.toLowerCase().contains(Character.toString((char)i)) || number.contains(",") || number.contains("."))
+                return false;
+        }
+        return true;
+    }
 
 
     public void enableBackground()
@@ -63,8 +63,8 @@ public class Medicine extends AppCompatActivity {
         textView1.setAlpha(1);
         textView2.setAlpha(1);
         scrollView.setAlpha(1);
-        constraintLayout.setAlpha(1);
-        button.setClickable(true);
+        floatingActionButton3.setAlpha(Float.valueOf(1));
+        floatingActionButton3.setClickable(true);
     }
 
     public void disableBackground()
@@ -78,13 +78,10 @@ public class Medicine extends AppCompatActivity {
         textView1.setAlpha(new Float(0.5));
         textView2.setAlpha(new Float(0.5));
         scrollView.setAlpha(new Float(0.5));
-        constraintLayout.setAlpha(new Float(0.5));
-        button.setClickable(false);
+        floatingActionButton3.setClickable(false);
+        floatingActionButton3.setAlpha(new Float(0.5));
     }
 
-    public MedicinesAdapter getMedicinesAdapter() {
-        return medicinesAdapter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,14 +94,13 @@ public class Medicine extends AppCompatActivity {
         textView2 = findViewById(R.id.textView4);
         imageView = findViewById(R.id.imageView);
         textDescription = findViewById(R.id.description);
-        button = findViewById(R.id.addReminder);
         scrollView = findViewById(R.id.scrollView2);
-        constraintLayout = findViewById(R.id.constraintLayout);
         floatingActionButton = findViewById(R.id.speakButton);
         anuluj = findViewById(R.id.anuluj);
         dodaj = findViewById(R.id.dodaj);
         editText = findViewById(R.id.editText);
         floatingActionButton1 = findViewById(R.id.floatingActionButton2);
+        floatingActionButton3 = findViewById(R.id.floatingActionButton3);
         sharedPreferences = this.getSharedPreferences("com.hello.doc", Context.MODE_PRIVATE);
         cardView = findViewById(R.id.ilosc_card);
         intent = new Intent(this, MakeRemind.class);
@@ -143,7 +139,7 @@ public class Medicine extends AppCompatActivity {
 
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent.putExtra("urlImage", imageUrl);
@@ -193,11 +189,11 @@ public class Medicine extends AppCompatActivity {
 
         if (sharedPreferences.getString("lekiDane", "").contains(textView.getText().toString())) {
             floatingActionButton1.setImageDrawable(getDrawable(R.drawable.ic_check_black_24dp));
-            textView2.setText("Lek dodany do listy");
+            textView2.setText("DODANO");
         }
         else {
             floatingActionButton1.setImageDrawable(getDrawable(R.drawable.ic_add_black_24dp));
-            textView2.setText("Dodaj lek do listy");
+            textView2.setText("DODAJ");
         }
 
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
@@ -209,20 +205,47 @@ public class Medicine extends AppCompatActivity {
                     cardView.animate().translationY(0).setDuration(1000);
 
                 }else {
-                    floatingActionButton1.setImageResource(R.drawable.ic_add_black_24dp);
-                    sharedPreferences.edit().putString("lekiDane", sharedPreferences.getString("lekiDane", "").replace(imageUrl + "  " + textView.getText().toString() + "  " + editText.getText() + "%!%", "")).apply();
-                    String[] pomoc = sharedPreferences.getString("lekiReminder", "").split("%!%");
-                    for (int i=0; i<pomoc.length; i++)
-                    {
-                        if (pomoc[i].contains(textView.getText().toString())) {
-                            pomoc[i] = pomoc[i].replace(pomoc[i], "");
-                        }else
-                            remindPomoc += pomoc[i] + "%!%";
-                    }
-                    sharedPreferences.edit().putString("lekiReminder", remindPomoc).apply();
-                    cardView.animate().translationY(-2000).setDuration(1000);
-                    cardView.setVisibility(View.INVISIBLE);
-                    enableBackground();
+
+                    new AlertDialog.Builder(Medicine.this)
+                            .setTitle("Usuwanie lekarstwa")
+                            .setMessage("Akcja ta spowoduje usunięcie lekarstwa z Twojej listy, czy chcesz kontynuować?")
+
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    floatingActionButton1.setImageResource(R.drawable.ic_add_black_24dp);
+
+                                    String[] helpTab = sharedPreferences.getString("lekiDane", "").split("%!%");
+                                    String helpTabString = "";
+
+                                    for (int i=0; i<helpTab.length; i++) {
+                                        if (!helpTab[i].contains(textView.getText().toString()))
+                                            helpTabString+=helpTab[i] + "%!%";
+                                    }
+
+                                    sharedPreferences.edit().putString("lekiDane", helpTabString).apply();
+                                    String[] pomoc = sharedPreferences.getString("lekiReminder", "").split("%!%");
+                                    for (int i=0; i<pomoc.length; i++)
+                                    {
+                                        if (pomoc[i].contains(textView.getText().toString())) {
+                                            pomoc[i] = pomoc[i].replace(pomoc[i], "");
+                                        }else
+                                            remindPomoc += pomoc[i] + "%!%";
+                                    }
+                                    sharedPreferences.edit().putString("lekiReminder", remindPomoc).apply();
+                                    textView2.setText("DODAJ");
+                                    Toast.makeText(Medicine.this, "Lek dodano pomyślnie!", Toast.LENGTH_SHORT).show();
+                                    cardView.animate().translationY(-2000).setDuration(1000);
+                                    cardView.setVisibility(View.INVISIBLE);
+                                    enableBackground();
+
+                                }
+                            })
+
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(R.drawable.ic_local_hospital_black_24dp)
+                            .show();
+
                 }
             }
         });
@@ -239,7 +262,7 @@ public class Medicine extends AppCompatActivity {
         dodaj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!editText.getText().equals("")){
+                if (!editText.getText().toString().equals("") || isNumber(editText.getText().toString())){
                     cardView.animate().translationY(-2000).setDuration(1000);
                     cardView.setVisibility(View.INVISIBLE);
                     String dawka = editText.getText().toString();
@@ -277,13 +300,14 @@ public class Medicine extends AppCompatActivity {
 
                 floatingActionButton1.setImageDrawable(getDrawable(R.drawable.ic_check_black_24dp));
                 enableBackground();
-                textView2.setText("Lek dodany do listy");
+                textView2.setText("DODANE");
 
                 sharedPreferences.edit().putBoolean("ifCreated", true).apply();
+                    Toast.makeText(Medicine.this, "Lekarstwo dodane pomyślnie!", Toast.LENGTH_SHORT).show();
 
 
                 }else
-                    Toast.makeText(Medicine.this, "Najpierw wprowadź ilość leku", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Medicine.this, "Wprowadź prawidłową ilość leku", Toast.LENGTH_SHORT).show();
             }
         });
 

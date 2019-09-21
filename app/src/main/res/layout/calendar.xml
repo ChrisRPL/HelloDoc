@@ -5,21 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <sun.bob.mcalendarview.MCalendarView
-        android:id="@+id/MCalendarView"
-        android:layout_width="0dp"
-        android:layout_height="400dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toTopOf="@+id/list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-    </sun.bob.mcalendarview.MCalendarView>
 
 
     <TextView
@@ -48,7 +34,33 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MCalendarView" />
+        app:layout_constraintTop_toBottomOf="@id/calendarCard" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/calendarCard"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="6dp"
+        app:cardMaxElevation="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <sun.bob.mcalendarview.MCalendarView
+            android:id="@+id/MCalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark">
+
+        </sun.bob.mcalendarview.MCalendarView>
+
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

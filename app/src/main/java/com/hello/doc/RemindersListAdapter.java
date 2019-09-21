@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class RemindersListAdapter extends ArrayAdapter<String> {
     private final Activity context1;
@@ -82,6 +82,7 @@ public class RemindersListAdapter extends ArrayAdapter<String> {
                                 }
 
                                 for (int i=0; i<datesToMark.length; i++){
+                                    Log.i("DATES TO MARK AND DATETIME", datesToMark[i] + "  |||  " + dateTime);
                                     if (datesToMark[i].contains(dateTime)){
                                         datesToMark[i] = "";
                                         continue;

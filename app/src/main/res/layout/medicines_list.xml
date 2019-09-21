@@ -46,10 +46,10 @@
 
         <ImageView
             android:id="@+id/thumbnail"
-            android:layout_marginRight="10dp"
-            android:scaleType="centerCrop"
             android:layout_width="90dp"
-            android:layout_height="90dp" />
+            android:layout_height="90dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside" />
 
         <TextView
             android:id="@+id/name"

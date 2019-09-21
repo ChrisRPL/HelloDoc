@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +19,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import sun.bob.mcalendarview.MCalendarView;
@@ -42,9 +43,7 @@ public class MakeRemind extends AppCompatActivity {
     EditText editText;
     Bundle bundle;
     SharedPreferences sharedPreferences;
-    String danePrzypomnienia = "";
     RadioButton tabletkiReminder, mililitryReminder, dawkiReminder;
-
 
 
     public void disableBackground(){
@@ -59,6 +58,14 @@ public class MakeRemind extends AppCompatActivity {
         addButton.setEnabled(false);
         addButton.setAlpha(new Float(0.5));
 
+    }
+
+    public Boolean isNumber(String number) {
+        for (int i=92; i<=122; i++) {
+            if (number.toLowerCase().contains(Character.toString((char)i)) || number.contains(",") || number.contains("."))
+                return false;
+        }
+        return true;
     }
 
     public void enableBackground(){
@@ -118,7 +125,11 @@ public class MakeRemind extends AppCompatActivity {
         setButton5 = findViewById(R.id.setButton5);
         setButton6 = findViewById(R.id.setButton6);
 
+        calendarReminder.init(this);
 
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date calendar = Calendar.getInstance().getTime();
+        final String currentDateTime = df.format(calendar);
 
         timeButton.setEnabled(false);
         amountButton.setEnabled(false);
@@ -159,7 +170,9 @@ public class MakeRemind extends AppCompatActivity {
         setButton6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                amountCard.animate().translationY(-2000).setDuration(1000);
+                amountCard.setVisibility(View.VISIBLE);
+                enableBackground();
             }
         });
 
@@ -204,18 +217,36 @@ public class MakeRemind extends AppCompatActivity {
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                disableBackground();
-                timeCard.setVisibility(View.VISIBLE);
-                timeCard.animate().translationY(0).setDuration(1000);
+                int size = 0;
+                for (int i=0; i<isChecked.size(); i++) {
+                    if (isChecked.get(i).equals(true))
+                        size++;
+                }
+                if (size == 0)
+                    Toast.makeText(MakeRemind.this, "Najpierw wybierz datę, aby wyznaczyć jej godzinę", Toast.LENGTH_SHORT).show();
+                else {
+                    disableBackground();
+                    timeCard.setVisibility(View.VISIBLE);
+                    timeCard.animate().translationY(0).setDuration(1000);
+                }
             }
         });
 
         amountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                disableBackground();
-                amountCard.setVisibility(View.VISIBLE);
-                amountCard.animate().translationY(0).setDuration(1000);
+                int size = 0;
+                for (int i=0; i<isChecked.size(); i++) {
+                    if (isChecked.get(i).equals(true))
+                        size++;
+                }
+                if (size == 0)
+                    Toast.makeText(MakeRemind.this, "Najpierw wybierz datę, aby wyznaczyć dawkę", Toast.LENGTH_SHORT).show();
+                else {
+                    disableBackground();
+                    amountCard.setVisibility(View.VISIBLE);
+                    amountCard.animate().translationY(0).setDuration(1000);
+                }
             }
         });
 
@@ -224,44 +255,48 @@ public class MakeRemind extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i=0; i<date.size(); i++) {
-                    Calendar c = Calendar.getInstance();
+                if (date.size()!=0 && !time.contains("") && !amount.contains("")) {
+                    for (int i = 0; i < date.size(); i++) {
+                        Calendar c = Calendar.getInstance();
+
+                        c.set(Calendar.MONTH, Integer.parseInt(date.get(i).split("/")[1]) - 1);
+                        c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.get(i).split("/")[0]));
+                        c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.get(i).split(":")[0]));
+                        c.set(Calendar.MINUTE, Integer.parseInt(time.get(i).split(":")[1]));
+                        c.set(Calendar.SECOND, 0);
 
 
-                   // c.set(Calendar.YEAR, Integer.parseInt(date.get(i).split("/")[2]));
-                    c.set(Calendar.MONTH, Integer.parseInt(date.get(i).split("/")[1]) - 1);
-                    c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.get(i).split("/")[0]));
-                    c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.get(i).split(":")[0]));
-                    c.set(Calendar.MINUTE, Integer.parseInt(time.get(i).split(":")[1]));
-                    c.set(Calendar.SECOND, 0);
-                    Log.i("asdasdasdasd", c.getTimeInMillis() - Calendar.getInstance().getTimeInMillis() + "");
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), sharedPreferences.getInt("requestCode", 0), intent, 0);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                        intentArray.add(pendingIntent);
 
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), sharedPreferences.getInt("requestCode", 0) , intent, 0);
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-                    intentArray.add(pendingIntent);
-                    sharedPreferences.edit().putInt("requestCode", sharedPreferences.getInt("requestCode", 0)).apply();
-                    sharedPreferences.edit().putString("lekiReminder", sharedPreferences.getString("lekiReminder", "") + bundle.getString("medicineName") + date.get(i) + " " + time.get(i) + ";" + "%!%").apply();
-                    sharedPreferences.edit().putString("remindDane", sharedPreferences.getString("remindDane", "") + bundle.getString("urlImage") + "  " + bundle.getString("medicineName") + date.get(i) + " " + time.get(i) + "  " + amount.get(i) + "  " + sharedPreferences.getInt("requestCode", 0) + "%!%").apply();
-                    sharedPreferences.edit().putString("datesToMark", sharedPreferences.getString("datesToMark", "") + date.get(i) + " " + time.get(i) + "%!%").apply();
-                    Log.i("sadasdasda", Integer.toString(sharedPreferences.getInt("requestCode", 0)));
-                    sharedPreferences.edit().putInt("requestCode", sharedPreferences.getInt("requestCode", 0) + 1).apply();
-                    Log.i("sadasdasda", Integer.toString(sharedPreferences.getInt("requestCode", 0)));
-                }
+
+                        sharedPreferences.edit().putInt("requestCode", sharedPreferences.getInt("requestCode", 0)).apply();
+                        sharedPreferences.edit().putString("lekiReminder", sharedPreferences.getString("lekiReminder", "") + bundle.getString("medicineName") + date.get(i) + " " + time.get(i) + ";" + "%!%").apply();
+                        sharedPreferences.edit().putString("remindDane", sharedPreferences.getString("remindDane", "") + bundle.getString("urlImage") + "  " + bundle.getString("medicineName") + date.get(i) + " " + time.get(i) + "  " + amount.get(i) + "  " + sharedPreferences.getInt("requestCode", 0) + "%!%").apply();
+                        sharedPreferences.edit().putString("datesToMark", sharedPreferences.getString("datesToMark", "") + date.get(i) + " " + time.get(i) + "%!%").apply();
+                        sharedPreferences.edit().putInt("requestCode", sharedPreferences.getInt("requestCode", 0) + 1).apply();
+
+                    }
 
 
                 String[] pomoc = sharedPreferences.getString("lekiReminder", "").split("%!%");
                 String pomocStr = "";
 
-                for (int i=0; i<pomoc.length; i++){
-                    if (pomoc[i].contains(bundle.getString("medicineName", "") + "brak przypomnienia")){
+                for (int i = 0; i < pomoc.length; i++) {
+                    if (pomoc[i].contains(bundle.getString("medicineName", "") + "brak przypomnienia")) {
                         pomoc[i] = "";
                     }
-                    pomocStr+=pomoc[i] + "%!%";
+                    pomocStr += pomoc[i] + "%!%";
                 }
-                sharedPreferences.edit().putString("lekiReminder",  pomocStr).apply();
-                Toast.makeText(MakeRemind.this, "Przypomnienie ustawione na!", Toast.LENGTH_SHORT).show();
+                sharedPreferences.edit().putString("lekiReminder", pomocStr).apply();
+                Toast.makeText(MakeRemind.this, "Przypomnienie ustawione pomyślnie!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+                else
+                    Toast.makeText(MakeRemind.this, "Wypełnij godzinę oraz dawkę dla każdej daty", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -279,7 +314,7 @@ public class MakeRemind extends AppCompatActivity {
                 timeButton.setEnabled(true);
                 amountButton.setEnabled(true);
                 timeButton.setAlpha(255);
-                timeButton.setAlpha(255);
+                amountButton.setAlpha(255);
 
 
                 ArrayList<DateData> dateData = calendarReminder.getMarkedDates().getAll();
@@ -302,7 +337,7 @@ public class MakeRemind extends AppCompatActivity {
                         miesiac = Integer.toString(dateData.get(i).getMonth());
 
                     date.add(dzien +"/"+ miesiac +"/"+ Integer.toString(dateData.get(i).getYear()));
-                    Log.i("adsadasdasdasd", date.get(i));
+
                     time.add("");
                     amount.add("");
                     isChecked.add(false);
@@ -330,7 +365,6 @@ public class MakeRemind extends AppCompatActivity {
 
 
                 for (int i=0; i<date.size(); i++){
-                    Log.i("asdasdasdasd", remindersAdapter.getItem(i));
                     if (isChecked.get(i)) {
                         String godzina, minuta;
                         if (timePicker.getMinute() == 0||timePicker.getMinute() == 1||timePicker.getMinute() == 2||
@@ -369,50 +403,53 @@ public class MakeRemind extends AppCompatActivity {
         setButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amountCard.animate().translationY(-2000).setDuration(1000);
-                amountCard.setVisibility(View.VISIBLE);
-                enableBackground();
-                String dawka = editText.getText().toString();
+                if (!editText.getText().toString().equals("") || isNumber(editText.getText().toString())) {
+                    amountCard.animate().translationY(-2000).setDuration(1000);
+                    amountCard.setVisibility(View.VISIBLE);
+                    enableBackground();
+                    String dawka = editText.getText().toString();
 
-                if (tabletkiReminder.isChecked()){
-                    if (editText.getText().toString().equals("1"))
-                        dawka = editText.getText().toString() + " tabletka";
-                    else if (editText.getText().toString().equals("2") || editText.getText().toString().equals("3") || editText.getText().toString().equals("4"))
-                        dawka = editText.getText().toString() + " tabletki";
-                    else
-                        dawka = editText.getText().toString() + " tabletek";
-                }
+                    if (tabletkiReminder.isChecked()) {
+                        if (editText.getText().toString().equals("1"))
+                            dawka = editText.getText().toString() + " tabletka";
+                        else if (editText.getText().toString().equals("2") || editText.getText().toString().equals("3") || editText.getText().toString().equals("4"))
+                            dawka = editText.getText().toString() + " tabletki";
+                        else
+                            dawka = editText.getText().toString() + " tabletek";
+                    }
 
-                if (mililitryReminder.isChecked()){
-                    if (editText.getText().toString().equals("1"))
-                        dawka = editText.getText().toString() + " mililitr";
-                    else if (editText.getText().toString().equals("2") || editText.getText().toString().equals("3") || editText.getText().toString().equals("4"))
-                        dawka = editText.getText().toString() + " mililitry";
-                    else
-                        dawka = editText.getText().toString() + " mililitrów";
-                }
+                    if (mililitryReminder.isChecked()) {
+                        if (editText.getText().toString().equals("1"))
+                            dawka = editText.getText().toString() + " mililitr";
+                        else if (editText.getText().toString().equals("2") || editText.getText().toString().equals("3") || editText.getText().toString().equals("4"))
+                            dawka = editText.getText().toString() + " mililitry";
+                        else
+                            dawka = editText.getText().toString() + " mililitrów";
+                    }
 
-                if (dawkiReminder.isChecked()){
-                    if (editText.getText().toString().equals("1"))
-                        dawka = editText.getText().toString() + " dawka";
-                    else if (editText.getText().toString().equals("2") || editText.getText().toString().equals("3") || editText.getText().toString().equals("4"))
-                        dawka = editText.getText().toString() + " dawki";
-                    else
-                        dawka = editText.getText().toString() + " dawek";
-                }
+                    if (dawkiReminder.isChecked()) {
+                        if (editText.getText().toString().equals("1"))
+                            dawka = editText.getText().toString() + " dawka";
+                        else if (editText.getText().toString().equals("2") || editText.getText().toString().equals("3") || editText.getText().toString().equals("4"))
+                            dawka = editText.getText().toString() + " dawki";
+                        else
+                            dawka = editText.getText().toString() + " dawek";
+                    }
 
-                for (int i=0; i<date.size(); i++){
-                    if (isChecked.get(i))
-                        amount.set(i, dawka);
+                    for (int i = 0; i < date.size(); i++) {
+                        if (isChecked.get(i))
+                            amount.set(i, dawka);
 
-                }
-                remindersAdapter = new RemindersAdapter(MakeRemind.this, date, time, amount, isChecked);
-                remindersList = findViewById(R.id.insideList);
-                remindersList.setAdapter(remindersAdapter);
+                    }
+                    remindersAdapter = new RemindersAdapter(MakeRemind.this, date, time, amount, isChecked);
+                    remindersList = findViewById(R.id.insideList);
+                    remindersList.setAdapter(remindersAdapter);
 
-                for (int i=0; i<isChecked.size(); i++){
-                    isChecked.set(i, false);
-                }
+                    for (int i = 0; i < isChecked.size(); i++) {
+                        isChecked.set(i, false);
+                    }
+                }else
+                    Toast.makeText(MakeRemind.this, "Wprowadź prawidłową ilość leku", Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -420,7 +457,12 @@ public class MakeRemind extends AppCompatActivity {
         calendarReminder.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
-                calendarReminder.markDate(date);
+                if (date.getDay() < Integer.parseInt(currentDateTime.split(" ")[0].split("/")[0]) || date.getMonth() < Integer.parseInt(currentDateTime.split(" ")[0].split("/")[1]))
+                    Toast.makeText(MakeRemind.this, "Nie można ustawić przypomnienia na dzień w przeszłości", Toast.LENGTH_SHORT).show();
+               else if (calendarReminder.getMarkedDates().getAll().contains(date))
+                    calendarReminder.unMarkDate(date);
+                else
+                    calendarReminder.markDate(date);
             }
         });
 

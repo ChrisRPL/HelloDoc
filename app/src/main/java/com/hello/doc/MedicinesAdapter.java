@@ -1,7 +1,6 @@
 package com.hello.doc;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ public class MedicinesAdapter extends RecyclerView.Adapter<MedicinesAdapter.MyVi
 
     private Context context;
     private List<ListMedicines> list;
-    SharedPreferences sharedPreferences;
 
     public MedicinesAdapter(Context context, List<ListMedicines> list) {
         this.context = context;
@@ -63,7 +61,7 @@ public class MedicinesAdapter extends RecyclerView.Adapter<MedicinesAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name, effect, pills, reminder;
+        public TextView name, pills, reminder;
         public ImageView thumbnail;
         public RelativeLayout viewBackground, viewForeground;
 
