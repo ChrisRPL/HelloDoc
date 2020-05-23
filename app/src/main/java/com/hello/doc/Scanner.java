@@ -3,7 +3,6 @@ package com.hello.doc;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
+import com.hello.doc.medicine.Medicine;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -6,6 +6,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hello.doc.medicine.MedicinesPage;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;

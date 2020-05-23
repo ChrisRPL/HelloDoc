@@ -20,15 +20,15 @@
 
 
 
-        <activity android:name=".MakeRemind" />
-        <activity android:name=".AlarmActivity" />
+        <activity android:name=".reminder.MakeRemind" />
+        <activity android:name=".alarm.AlarmActivity" />
         <activity
             android:name=".Loading"
             android:configChanges="orientation"
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Medicine"
+            android:name=".medicine.Medicine"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
@@ -53,7 +53,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <receiver android:name=".AlertReceiver" />
+        <receiver android:name=".alarm.AlertReceiver" />
     </application>
 
 </manifest>

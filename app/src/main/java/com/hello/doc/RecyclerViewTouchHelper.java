@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 
 import android.view.View;
 
+import com.hello.doc.medicine.MedicinesAdapter;
+
 public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     private RecyclerItemTouchHelperListener listener;
@@ -21,8 +23,6 @@ public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
         return false;
     }
-
-
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {

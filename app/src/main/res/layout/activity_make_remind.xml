@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MakeRemind">
+    tools:context=".reminder.MakeRemind">
 
     <Button
         android:id="@+id/addButton"
@@ -173,7 +173,7 @@
                 android:layout_marginBottom="80dp"></sun.bob.mcalendarview.MCalendarView>
 
             <Button
-                android:id="@+id/setButton"
+                android:id="@+id/selectDates"
                 android:layout_width="124dp"
                 android:layout_height="52dp"
                 android:layout_alignParentRight="true"
@@ -245,7 +245,7 @@
                 android:layout_centerInParent="true"></TimePicker>
 
             <Button
-                android:id="@+id/setButton2"
+                android:id="@+id/setRemindersTime"
                 android:layout_width="124dp"
                 android:layout_height="52dp"
                 android:layout_alignParentBottom="true"
@@ -312,7 +312,7 @@
 
 
             <Button
-                android:id="@+id/setButton3"
+                android:id="@+id/setMedicinesDosage"
                 android:layout_width="124dp"
                 android:layout_height="52dp"
                 android:layout_alignParentBottom="true"
@@ -354,7 +354,7 @@
                 android:inputType="number" />
 
             <RadioButton
-                android:id="@+id/tabletkiReminder"
+                android:id="@+id/dosagePills"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textView17"
@@ -365,7 +365,7 @@
                 android:text="tabletki" />
 
             <RadioButton
-                android:id="@+id/mililitryReminder"
+                android:id="@+id/dosageMillilitres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textView17"
@@ -374,7 +374,7 @@
                 android:text="mililitry" />
 
             <RadioButton
-                android:id="@+id/dawkiReminder"
+                android:id="@+id/dosageDefault"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textView17"

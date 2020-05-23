@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".AlarmActivity">
+    tools:context=".alarm.AlarmActivity">
 
     <Button
-        android:id="@+id/odrzucButton"
+        android:id="@+id/rejectAlarm"
         android:layout_width="150dp"
         android:layout_height="80dp"
         android:layout_marginTop="24dp"
