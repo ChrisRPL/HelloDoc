@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.util.AttributeSet;
@@ -15,7 +16,6 @@ public class Navigation extends BottomNavigationView {
 
     private Path mPath;
     private Paint mPaint;
-
 
 
     public final int CURVE_CIRCLE_RADIUS = 0;
@@ -37,14 +37,17 @@ public class Navigation extends BottomNavigationView {
         super(context);
         init();
     }
+
     public Navigation(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
+
     public Navigation(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
+
     private void init() {
         mPath = new Path();
         mPaint = new Paint();
@@ -60,20 +63,20 @@ public class Navigation extends BottomNavigationView {
         mNavigationBarWidth = getWidth();
         mNavigationBarHeight = getHeight();
         // the coordinates (x,y) of the start point before curve
-        mFirstCurveStartPoint.set((mNavigationBarWidth / 2) - (CURVE_CIRCLE_RADIUS * 2) - (CURVE_CIRCLE_RADIUS / 3), 0);
+        mFirstCurveStartPoint.set((mNavigationBarWidth / 2), 0);
         // the coordinates (x,y) of the end point after curve
-        mFirstCurveEndPoint.set(mNavigationBarWidth / 2, CURVE_CIRCLE_RADIUS + (CURVE_CIRCLE_RADIUS / 4));
+        mFirstCurveEndPoint.set(mNavigationBarWidth / 2, CURVE_CIRCLE_RADIUS);
         // same thing for the second curve
         mSecondCurveStartPoint = mFirstCurveEndPoint;
-        mSecondCurveEndPoint.set((mNavigationBarWidth / 2) + (CURVE_CIRCLE_RADIUS * 2) + (CURVE_CIRCLE_RADIUS / 3), 0);
+        mSecondCurveEndPoint.set((mNavigationBarWidth / 2), 0);
 
         // the coordinates (x,y)  of the 1st control point on a cubic curve
-        mFirstCurveControlPoint1.set(mFirstCurveStartPoint.x + CURVE_CIRCLE_RADIUS + (CURVE_CIRCLE_RADIUS / 4), mFirstCurveStartPoint.y);
+        mFirstCurveControlPoint1.set(mFirstCurveStartPoint.x + CURVE_CIRCLE_RADIUS, mFirstCurveStartPoint.y);
         // the coordinates (x,y)  of the 2nd control point on a cubic curve
-        mFirstCurveControlPoint2.set(mFirstCurveEndPoint.x - (CURVE_CIRCLE_RADIUS * 2) + CURVE_CIRCLE_RADIUS, mFirstCurveEndPoint.y);
+        mFirstCurveControlPoint2.set(mFirstCurveEndPoint.x + CURVE_CIRCLE_RADIUS, mFirstCurveEndPoint.y);
 
-        mSecondCurveControlPoint1.set(mSecondCurveStartPoint.x + (CURVE_CIRCLE_RADIUS * 2) - CURVE_CIRCLE_RADIUS, mSecondCurveStartPoint.y);
-        mSecondCurveControlPoint2.set(mSecondCurveEndPoint.x - (CURVE_CIRCLE_RADIUS + (CURVE_CIRCLE_RADIUS / 4)), mSecondCurveEndPoint.y);
+        mSecondCurveControlPoint1.set(mSecondCurveStartPoint.x - CURVE_CIRCLE_RADIUS, mSecondCurveStartPoint.y);
+        mSecondCurveControlPoint2.set(mSecondCurveEndPoint.x, mSecondCurveEndPoint.y);
 
         mPath.reset();
         mPath.moveTo(0, 0);

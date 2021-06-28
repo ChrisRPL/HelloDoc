@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +100,7 @@ public class CalendarPage extends Fragment {
         mCalendarView.setOnDateClickListener(new OnDateClickListener() {
 
             List<DateData> dates = new ArrayList<>();
+
             @Override
             public void onDateClick(View view, DateData date) {
 
@@ -107,7 +110,7 @@ public class CalendarPage extends Fragment {
                 //THEN WE IMPORT AGAIN DATES TO CHECK, IF WE CLICKED A DATE THA IS NOT MARKED ON CALENDAR
                 String[] datesToMarkAfterClick = sharedPreferences.getString("datesToMark", "").split("%!%");
 
-                if (datesToMarkAfterClick.length!=datesToMark.length) {
+                if (datesToMarkAfterClick.length != datesToMark.length) {
 
                     //WE CLEAR ALL MARKS TO MARK NEW DATES
                     mCalendarView.getMarkedDates().getAll().clear();
@@ -150,16 +153,16 @@ public class CalendarPage extends Fragment {
                     }
                 }
 
-               dates.add(date);
+                dates.add(date);
 
-               date.setMarkStyle(new MarkStyle().setColor(Color.RED));
+                date.setMarkStyle(new MarkStyle().setColor(Color.RED));
 
-               //WE SHOW ONLY ONE MARKED DATE, SO WE HAVE TO UNMARK PREVIOUS MARKED DATE
-               if (dates.size()>1) {
-                   mCalendarView.unMarkDate(dates.get(dates.size() - 2));
-                   mCalendarView.markDate(dates.get(dates.size() - 1));
-               }else if (dates.size() == 1)
-                   mCalendarView.markDate(dates.get(0));
+                //WE SHOW ONLY ONE MARKED DATE, SO WE HAVE TO UNMARK PREVIOUS MARKED DATE
+                if (dates.size() > 1) {
+                    mCalendarView.unMarkDate(dates.get(dates.size() - 2));
+                    mCalendarView.markDate(dates.get(dates.size() - 1));
+                } else if (dates.size() == 1)
+                    mCalendarView.markDate(dates.get(0));
 
                 int dayOfMonth = date.getDay(), year = date.getYear(), monthOfYear = date.getMonth();
 
@@ -170,7 +173,7 @@ public class CalendarPage extends Fragment {
                 dateRemind.clear();
                 amountText.clear();
 
-                switch (dayOfMonth){
+                switch (dayOfMonth) {
                     case 1:
                     case 2:
                     case 3:
@@ -187,7 +190,7 @@ public class CalendarPage extends Fragment {
                         break;
                 }
 
-                switch (monthOfYear ){
+                switch (monthOfYear) {
                     case 1:
                     case 2:
                     case 3:
@@ -197,7 +200,7 @@ public class CalendarPage extends Fragment {
                     case 7:
                     case 8:
                     case 9:
-                        remindersMonth = "0" + (monthOfYear );
+                        remindersMonth = "0" + (monthOfYear);
                         break;
                     default:
                         remindersMonth = "" + (monthOfYear);
@@ -207,18 +210,18 @@ public class CalendarPage extends Fragment {
                 String remindersDate = remindersDay + "/" + remindersMonth + "/" + remindersYear;
 
                 //IF THERE ARE REMINDERS UNDER CLICKED DATE, WE SHOW THEM UNDER CALENDAR
-                for (int i=0; i<remindersOfDate.length; i++){
-                    if (remindersOfDate[i].contains(remindersDate)){
-                        String[] nameAndTime = remindersOfDate[i].replace(remindersDate, "").split("  ")[1].split(" ");
+                for (String s : remindersOfDate) {
+                    if (s.contains(remindersDate)) {
+                        String[] nameAndTime = s.replace(remindersDate, "").split("  ")[1].split(" ");
                         String medicineLabel = "";
 
-                        for (int j=0; j<nameAndTime.length - 1; j++)
+                        for (int j = 0; j < nameAndTime.length - 1; j++)
                             medicineLabel += nameAndTime[j] + " ";
 
-                        timeClock.add(remindersOfDate[i].replace(remindersDate, "").split("  ")[1].split(" ")[nameAndTime.length - 1]);
+                        timeClock.add(s.replace(remindersDate, "").split("  ")[1].split(" ")[nameAndTime.length - 1]);
                         medicineText.add(medicineLabel);
                         dateRemind.add(remindersDate);
-                        amountText.add(remindersOfDate[i].replace(remindersDate, "").split("  ")[2]);
+                        amountText.add(s.replace(remindersDate, "").split("  ")[2]);
                     }
                 }
 
@@ -227,18 +230,16 @@ public class CalendarPage extends Fragment {
                 listView.setAdapter(remindersListAdapter);
 
                 //IF THERE ARE NO REMINDERS, WE SHOW TEXT VIEW WITH INFO
-                if (timeClock.size()!=0){
+                if (timeClock.size() != 0) {
                     textView.setVisibility(View.INVISIBLE);
                     listView.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     listView.setVisibility(View.INVISIBLE);
                     textView.setVisibility(View.VISIBLE);
                 }
 
             }
         });
-
 
 
     }

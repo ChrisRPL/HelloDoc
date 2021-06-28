@@ -10,10 +10,12 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.hello.doc.Loading;
 import com.hello.doc.R;
@@ -26,38 +28,33 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperListener {
 
     private RecyclerView recyclerView;
-    private List<ListMedicines> list , backupList;
+    private List<ListMedicines> list, backupList;
     private MedicinesAdapter medicinesAdapter;
     private CoordinatorLayout coordinatorLayout;
     private String medicineName = "", reminPomocStr = "", reminPomocStrCzyste = "", reminPomocStrSwipe = "", code = "";
     private SharedPreferences sharedPreferences;
-    private String[] pomoc, wewPomoc, reminPomoc, reminPomocSwipe;
-    private ListMedicines listMedicines;
     private SearchView searchView;
-    private TextView mainText;
-    private Boolean connected;
-    private ImageView ludzik;
-
-
 
 
     @Nullable
@@ -65,11 +62,9 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-
         return inflater.inflate(R.layout.medicines, container, false);
 
     }
-
 
 
     @Override
@@ -82,20 +77,15 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
         sharedPreferences = getContext().getSharedPreferences("com.hello.doc", Context.MODE_PRIVATE);
         searchView = getView().findViewById(R.id.searchView);
         searchView.setQueryHint("szukaj...");
-        mainText = getView().findViewById(R.id.textView2);
-        ludzik = getView().findViewById(R.id.ludzik);
+        TextView mainText = getView().findViewById(R.id.textView2);
+        ImageView image = getView().findViewById(R.id.ludzik);
 
 
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-
-            connected = true;
-        }
-        else{
-            connected = false;
-
+        } else {
             new AlertDialog.Builder(getContext()).setCancelable(false)
                     .setTitle("BRAK POŁĄCZENIA Z INTERNETEM")
                     .setMessage("Sprawdź swoje połączenie z internetem")
@@ -110,7 +100,6 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
         }
 
 
-
         backupList = new ArrayList<>();
 
 
@@ -118,7 +107,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
             @Override
             public void onClick(View v) {
 
-                    searchView.setIconified(false);
+                searchView.setIconified(false);
 
             }
         });
@@ -134,7 +123,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
             public boolean onQueryTextChange(String newText) {
                 List<ListMedicines> newList = new ArrayList<>();
 
-                for (int i=0; i<list.size(); i++){
+                for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).getMedicineName().toLowerCase().contains(newText.toLowerCase()))
                         newList.add(list.get(i));
                 }
@@ -164,7 +153,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
             public void onItemClick(View view, int position) {
                 code = list.get(position).getMedicineName();
                 medicineName = code;
-                new getMedicinieOnClick().execute();
+                new getMedicineOnClick().execute();
             }
 
             @Override
@@ -173,21 +162,21 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
             }
         }));
 
-        pomoc = sharedPreferences.getString("medicinesData", "").split("%!%");
-        reminPomoc = sharedPreferences.getString("lekiReminder", "").split("%!%");
+        String[] pomoc = sharedPreferences.getString("medicinesData", "").split("%!%");
+        String[] reminPomoc = sharedPreferences.getString("lekiReminder", "").split("%!%");
 
 
         if (!sharedPreferences.getString("medicinesData", "").equals("")) {
-            for (int i = 0; i < pomoc.length; i++) {
-                wewPomoc = pomoc[i].split("  ");
-                listMedicines = new ListMedicines();
+            for (String s : pomoc) {
+                String[] wewPomoc = s.split(" {2}");
+                ListMedicines listMedicines = new ListMedicines();
                 listMedicines.setThumbnail(wewPomoc[0]);
                 listMedicines.setMedicineName(wewPomoc[1]);
                 listMedicines.setPills(wewPomoc[2]);
 
-                for (int j=0; j<reminPomoc.length; j++){
-                    if (reminPomoc[j].contains(wewPomoc[1])){
-                        reminPomocStr += "\n" + reminPomoc[j];
+                for (String value : reminPomoc) {
+                    if (value.contains(wewPomoc[1])) {
+                        reminPomocStr += "\n" + value;
                         reminPomocStrCzyste += reminPomocStr.replaceAll(wewPomoc[1], "") + " ";
                         reminPomocStr = "";
                     }
@@ -202,12 +191,9 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
                 list.add(listMedicines);
             }
 
-            for (int i=0; i<list.size(); i++){
-                backupList.add(list.get(i));
-            }
+            backupList.addAll(list);
 
         }
-
 
 
         medicinesAdapter = new MedicinesAdapter(getContext(), list);
@@ -219,15 +205,13 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
-
-
         ItemTouchHelper.SimpleCallback item = new RecyclerViewTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(item).attachToRecyclerView(recyclerView);
 
         String[] medicinesData = sharedPreferences.getString("medicinesData", "").split(" ");
 
-        for (int i=0; i<medicinesData.length; i++){
-            if (medicinesData[i].contains("brak")){
+        for (String medicinesDatum : medicinesData) {
+            if (medicinesDatum.contains("brak")) {
 
                 new AlertDialog.Builder(getContext())
                         .setTitle("Puste lekarstwo")
@@ -250,19 +234,18 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
             }
         }
 
-        if (!sharedPreferences.getString("medicinesData", "").equals("")){
+        if (!sharedPreferences.getString("medicinesData", "").equals("")) {
             recyclerView.setVisibility(View.VISIBLE);
             mainText.setVisibility(View.INVISIBLE);
-            ludzik.setVisibility(View.INVISIBLE);
-        }
-        else{
+            image.setVisibility(View.INVISIBLE);
+        } else {
             recyclerView.setVisibility(View.INVISIBLE);
             mainText.setVisibility(View.VISIBLE);
-            ludzik.setVisibility(View.VISIBLE);
+            image.setVisibility(View.VISIBLE);
         }
         mainText.setZ(100);
-        ludzik.setZ(100);
-        ludzik.setAlpha(125);
+        image.setZ(100);
+        image.setAlpha(125);
 
 
     }
@@ -270,19 +253,18 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof  MedicinesAdapter.MyViewHolder){
+        if (viewHolder instanceof MedicinesAdapter.MyViewHolder) {
             String name = list.get(viewHolder.getAdapterPosition()).getMedicineName();
             final ListMedicines deletedItem = list.get(viewHolder.getAdapterPosition());
             final int deleteIndex = viewHolder.getAdapterPosition();
 
             medicinesAdapter.removeItem(deleteIndex);
-            sharedPreferences.edit().putString("medicinesDataBackup", sharedPreferences.getString("medicinesData",  "")).apply();
+            sharedPreferences.edit().putString("medicinesDataBackup", sharedPreferences.getString("medicinesData", "")).apply();
             sharedPreferences.edit().putString("medicinesData", sharedPreferences.getString("medicinesData", "").replace(deletedItem.getThumbnail() + "  " + deletedItem.getMedicineName() + "  " + deletedItem.getPills() + "%!%", "")).apply();
-            reminPomocSwipe = deletedItem.getReminder().split("; ");
+            String[] reminPomocSwipe = deletedItem.getReminder().split("; ");
 
-            for (int i=0; i<reminPomocSwipe.length; i++)
-            {
-                reminPomocStrSwipe += deletedItem.getMedicineName() + reminPomocSwipe[i] + "%!%";
+            for (String s : reminPomocSwipe) {
+                reminPomocStrSwipe += deletedItem.getMedicineName() + s + "%!%";
             }
 
             sharedPreferences.edit().putString("lekiReminder", sharedPreferences.getString("lekiReminder", "").replace(reminPomocStrSwipe, "")).apply();
@@ -303,8 +285,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
 
     }
 
-    public class getMedicinieOnClick extends AsyncTask<Void, Void, Void>
-    {
+    public class getMedicineOnClick extends AsyncTask<Void, Void, Void> {
         Document doc;
         String medicineUrl = "", imgUrl = "", medicineName2 = "", description = "", cleanDescription = "";
         Intent intent;
@@ -320,7 +301,13 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
                 e.printStackTrace();
             }
 
-            medicineUrl = doc.select("div.r > a").attr("href");
+            medicineUrl = doc.select("div#search").html();
+
+            Pattern pattern = Pattern.compile("\"https://aptekahit.pl/product/[^\"]+\"");
+            Matcher matcher = pattern.matcher(medicineUrl);
+
+            if (matcher.find())
+                medicineUrl = matcher.group().replace("\"", "");
 
             Document medicine = null;
 
@@ -330,7 +317,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
                 e.printStackTrace();
             }
 
-            imgUrl =  "https://aptekahit.pl/" + medicine.select("li").attr("data-src");
+            imgUrl = "https://aptekahit.pl/" + medicine.select("li").attr("data-src");
             medicineName2 = medicine.select("h1.section-header.product-content-header").text();
 
             description = medicine.select("div.product-content-text.tinymce").outerHtml();
@@ -358,7 +345,7 @@ public class MedicinesPage extends Fragment implements RecyclerItemTouchHelperLi
     @Override
     public void onResume() {
         super.onResume();
-        if (sharedPreferences.getBoolean("ifCreated", true)){
+        if (sharedPreferences.getBoolean("ifCreated", true)) {
             sharedPreferences.edit().putBoolean("ifCreated", false).apply();
             this.onViewCreated(getView(), null);
         }

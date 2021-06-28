@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hello.doc.medicine.MedicinesPage;
@@ -11,6 +12,7 @@ import com.hello.doc.medicine.MedicinesPage;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment selectedFragment = null;
 
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.page1:
                         selectedFragment = new MedicinesPage();
                         break;
@@ -59,9 +61,7 @@ public class MainActivity extends AppCompatActivity {
         frameLayout.setZ(1);
 
 
-
-
-        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.INTERNET}, 2);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 2);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

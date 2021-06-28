@@ -13,6 +13,5 @@ public class Loading extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
 
-
     }
 }
